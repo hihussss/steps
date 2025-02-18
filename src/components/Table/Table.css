@@ -1,0 +1,8 @@
+table, th, td {
+    border: 1px solid black;
+    text-align: center;
+}
+
+th:nth-child(n+1) {
+    padding-left: 50px;
+}
