@@ -1,19 +1,18 @@
 import React from 'react'
 import './Training.css'
-import { IForm } from '../../App'
+import { IForms } from '../../App'
 
 interface IProps {
     handlerChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
     handlerSubmit: (e: React.FormEvent<HTMLFormElement>) => void,
-    form: IForm[]
+    form: IForms
 }
 
 export  const Training: React.FC<IProps> = (props) => {
-
-    console.log(props.form)
     const {handlerChange, handlerSubmit} = props
-    const [{date, distance}] = props?.form
-  return (
+    const {date, distance} = props?.form
+  
+    return (
    <form className='form' onSubmit={handlerSubmit}>
     <div className='inputBox'>
     <label htmlFor='date'>Дата(ДД.ММ.ГГ)</label>

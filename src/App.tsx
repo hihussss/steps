@@ -4,32 +4,57 @@ import './App.css';
 import { Training }  from "./components/Training/Training";
 import { Table }  from "./components/Table/Table";
 
-export interface IForm {
+
+export interface IForms {
+  id: string
   date: string,
-  distance: number
+  distance: number,
+  
+}
+
+export interface IForm {
+  forms: IForms,
+  bookTraining: IForms[]
 }
 
 function App() {
-  const [form, setForm] = useState<IForm[]>([{
-    date: '2022-12-12',
-    distance: 0
-  }]);
+  const [form, setForm] = useState<IForm>({
+    forms : {
+      id: '',
+      date: '',
+      distance: 0
+    },
+    bookTraining: []
+
+  });
   
 
   const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name,value} = e.target
 
-    setForm((preForm) => ({...preForm, [name]: value}))
+    setForm((preForm) => ({...preForm, forms: {...preForm.forms, [name]: value }}))
   }
 
   const handlerSubmit =(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
-    console.log(form)
+    console.log(form.forms.date)
+    console.log(form.forms)
+    setForm((preForm) => ({...preForm, forms: {...preForm.forms, id: form.forms.date }}))
+    if (form.bookTraining.find((item) => item.date === form.forms.date)) {
+      form.bookTraining.forEach((item) => {
+        if (item.date === form.forms.date) {
+          item.distance = Number(item.distance) + Number(form.forms.distance)
+        }
+      })   
+    }else{
+      setForm((preForm) => ({...preForm, bookTraining: [...preForm.bookTraining, form.forms]}))
+    }    
   }
 
+ 
+
   const handlerDelete = (date: string) => {
-    setForm((preForm) => preForm.filter((item) => item.date !== date))
+    setForm((preForm) => ({...preForm, bookTraining: [...preForm.bookTraining.filter((item) => item.date !== date)]}))
     
   }
 
@@ -37,8 +62,8 @@ function App() {
 
   return (
     <div>
-    <Training handlerChange={handlerChange} handlerSubmit={handlerSubmit} form={form} />
-    <Table handlerDelete={handlerDelete} form={form} />
+    <Training handlerChange={handlerChange} handlerSubmit={handlerSubmit} form={form.forms} />
+    <Table handlerDelete={handlerDelete} form={form.bookTraining} />
     </div>
       
     
