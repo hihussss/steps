@@ -47,7 +47,7 @@ function App() {
         }
       })   
     }else{
-      setForm((preForm) => ({...preForm, bookTraining: [...preForm.bookTraining, form.forms]}))
+      setForm((preForm) => ({...preForm, bookTraining: [form.forms, ...preForm.bookTraining]}))
     }    
   }
 
