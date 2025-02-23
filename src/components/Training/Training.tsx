@@ -1,17 +1,44 @@
-import React from 'react'
+import React , { SetStateAction, useState} from 'react'
 import './Training.css'
-import { IForms } from '../../App'
+import { IForms,IForm } from '../../App'
 
 interface IProps {
-    handlerChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    handlerSubmit: (e: React.FormEvent<HTMLFormElement>) => void,
-    form: IForms
+    setForm: React.Dispatch<SetStateAction<IForm>>
+    form: IForms[]
 }
 
-export  const Training: React.FC<IProps> = (props) => {
-    const {handlerChange, handlerSubmit} = props
-    const {date, distance} = props?.form
-  
+export  const Training: React.FC<IProps> = ({setForm, form}) => {
+    
+    const [state , setState] = useState<IForms>({
+        id: '',
+        date: '',
+        distance: 0
+    })
+    const handlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const {name,value} = e.target
+        setState((item) => ({...item, [name]: value }))
+      }
+    
+    const handlerSubmit =(e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        
+        setState((item) => ({...item, id: state.date}))
+        
+        
+        if (form.find((item) => item.date === state.date)) {
+            form.forEach((item) => {
+              if (item.date === state.date) {
+                item.distance = Number(item.distance) + Number(state.distance)
+                setForm((preForm) => ({...preForm, bookTraining: [...preForm.bookTraining]}))
+              }
+            })   
+          }else{
+            setForm((preForm) => ({...preForm, bookTraining: [state, ...preForm.bookTraining]}))
+          }
+
+         
+      }
+
     return (
    <form className='form' onSubmit={handlerSubmit}>
     <div className='inputBox'>
@@ -20,7 +47,7 @@ export  const Training: React.FC<IProps> = (props) => {
         id = 'date' 
         type = 'date'
         name = 'date'
-        value = {date}
+        value = {state.date}
         onChange = {handlerChange}    
     />
     </div>
@@ -30,7 +57,7 @@ export  const Training: React.FC<IProps> = (props) => {
         id = 'distance' 
         type = 'number'
         name = 'distance'
-        value = {distance}
+        value = {state.distance}
         onChange = {handlerChange}
         />
     </div>

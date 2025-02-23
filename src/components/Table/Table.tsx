@@ -1,4 +1,4 @@
-import React from 'react'
+import React  from 'react'
 import './Table.css'
 import { IForms } from '../../App'
 interface IProps2 {
@@ -8,7 +8,7 @@ interface IProps2 {
 
 
 export const Table: React.FC<IProps2> = (props) => {
-    
+   
     if (props.form.length === 0) {
         return (
             <table>
